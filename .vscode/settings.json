@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "string": "cpp",
+        "global.h": "c",
+        "scheduler.h": "c",
+        "dht.h": "c",
+        "esp32servo.h": "c"
+    }
+}
