@@ -10,8 +10,6 @@ void SCH_Init() {
     for (int i = 0; i < SCH_MAX_TASKS; i++) {
         SCH_Delete_Task(i);
     }
-
-  
 }
 
 void SCH_Delete_Task(int task_index) {

@@ -16,7 +16,6 @@ void timerRun(){
 			timer_counter[i]--;
 			if(timer_counter[i] <= 0){
 			timer_flag[i] = 1;
-
 			}
 		}
 	}

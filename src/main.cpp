@@ -6,8 +6,8 @@ Servo servo;
 void IRAM_ATTR onTimer() {
   // Hàm này sẽ được gọi mỗi khi timer ngắt
   //Serial.println("timer");
+  timerRun();
   SCH_Update();
-  toggleLED();
 }
 
 //------------------------------------------------------------------------------------//
@@ -24,6 +24,8 @@ void setup() {
   pinMode(FAN_PIN, OUTPUT);
   pinMode(MOTOR_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
 
   //---------------------------------INIT FUNC----------------------------------//
   Serial.begin(9600);
@@ -39,9 +41,11 @@ void setup() {
   //---------------------------------SCHEDULER-----------------------------------//
   SCH_Init();
     //SCH_Add_Task(toggleLED, 0, 1);
-  SCH_Add_Task(sendDHT_temp, 0, 30);
-  SCH_Add_Task(sendDHT_humi, 10, 30);
-  SCH_Add_Task(send_light, 20, 30);
+  SCH_Add_Task(sendDHT_temp, 0, 51);
+  SCH_Add_Task(sendDHT_humi, 17, 51);
+  SCH_Add_Task(send_light, 34, 51);
+  SCH_Add_Task(send_gas, 3, 3);
+  SCH_Add_Task(send_fire, 1, 3);
   SCH_Add_Task(fsm_lcd, 0, 1);
   SCH_Add_Task(device_control, 3, 1);
 
@@ -59,39 +63,8 @@ void setup() {
 }
 
 void loop() {  
-
-   SCH_Dispatch_Tasks();
-    read_serial_data();
-   key_is_press();
-   fsm_password();
-
-
-  //digitalWrite(LED_PIN, 0);
- // read_serial_data();
-  //run_button();
-  //readSensorValue(inputLight);
- // Chờ 2 giây trước khi đọc và gửi dữ liệu tiếp
-
-  // // Kiểm tra xem timerFlag có được thiết lập từ ngắt không
-  // if (timerFlag) {
-  //   timerFlag = false;  // Reset cờ
-  //   digitalWrite(LED, !digitalRead(LED));
-  //   Serial.println("Timer Interrupt Triggered!");
-  // }
-
-  
-  // fsm_password();
-  // key_is_press();
-  
-
+  SCH_Dispatch_Tasks();
+  read_serial_data();
+  key_is_press();
+  fsm_password();
 }
-
-/*bufer còi , quạt, đèn, morto
-hàm ghi buffer
-i2c lcd
-bàn phims so
-ham check gas, cháy->buffer
-button bật đèn, bật quạt
-
-
-*/

@@ -45,16 +45,16 @@
 #define BUZZER_PIN 18
 
 #define MAX_DEVICE  4
-#define MOTOR   0
+#define LED     0
 #define FAN     1
-#define BUZZER  2
-#define LED     3
+#define MOTOR   2
+#define BUZZER  3
 #define SLAVE_ADDRESS_LCD 0x21 // Địa chỉ I2C của LCD (sử dụng địa chỉ phù hợp với LCD của bạn)
 
 
 extern int status;
 extern bool ledState;
-extern int buffer_device[MAX_DEVICE] ;//1:motor; 2:quạt; 3:còi; 4:led
+extern int buffer_device[MAX_DEVICE] ;
 extern float buffer_data[5];
 extern DHT dht;
 extern Servo servo;

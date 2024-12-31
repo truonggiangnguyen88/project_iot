@@ -1,14 +1,8 @@
 #include"read_write_data.h"
 #include "global.h"
-void toggleLED() {
-  if (ledState) {
-    digitalWrite(LED_PIN, LOW);  // Tắt LED nếu ledState là true
-    ledState = false;  // Cập nhật trạng thái LED
-  } else {
-    digitalWrite(LED_PIN, HIGH);  // Bật LED nếu ledState là false
-    ledState = true;  // Cập nhật trạng thái LED
-  }
-}
+
+int fire_value;
+int gas_value;
 
 void sendDHT_temp() {
     float temperature = dht.readTemperature();  // Đọc nhiệt độ
@@ -45,22 +39,52 @@ void send_light() {
     Serial.println(message);
 }
 
-void send_gas(){
-  float gas_value = digitalRead(GAS_PIN);
-  buffer_data[4] = gas_value;
-  char message[20];
-  snprintf(message, sizeof(message), "!sensor5:G:%.1f#", gas_value);
-  Serial.println(message);
-}
-
 void send_fire(){
-  float fire_value = digitalRead(FIRE_PIN);
-  buffer_data[3] = fire_value;
-  char message[20];
-  snprintf(message, sizeof(message), "!sensor4:L:%.1f#", fire_value);
-  Serial.println(message);
+  fire_value = digitalRead(FIRE_PIN);
+
+
+  if(fire_value == LOW){
+    buffer_device[BUZZER] = 1;
+    //buffer_device[FAN] = 1;
+   // setTimer(2, 10);
+    char message1[20];
+    snprintf(message1, sizeof(message1), "!sensor4:Q:%d#", 1);
+    Serial.println(message1);
+
+    buffer_data[3] == fire_value;
+    char message[20];
+    snprintf(message, sizeof(message), "!sensor4:F:%d#", fire_value);
+    Serial.println(message);
+  }
+
+  else if(fire_value == HIGH && gas_value == HIGH){
+    buffer_device[BUZZER] = 0;
+  }
+
 }
 
+void send_gas(){
+  gas_value = digitalRead(GAS_PIN);
+  if(gas_value == LOW){
+    buffer_device[BUZZER] = 1;
+    buffer_device[FAN] = 1;
+    //setTimer(2, 10);
+    char message1[20];
+    snprintf(message1, sizeof(message1), "!sensor5:Q:%d#", 1);
+    Serial.println(message1);
+
+
+    buffer_data[4] = gas_value;
+    char message[20];
+    snprintf(message, sizeof(message), "!sensor5:G:%d#", gas_value);
+    Serial.println(message);
+  }
+  else if(fire_value == HIGH && gas_value == HIGH){
+    buffer_device[BUZZER] = 0;
+  }
+
+
+}
 
 void read_serial_data() {
   // Kiểm tra xem có dữ liệu chưa

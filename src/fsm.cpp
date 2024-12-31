@@ -28,6 +28,7 @@ void fsm_lcd(){
                 lcd_init();
                 status = INIT_PASSWORD;
             }
+            if(timer_flag[1] == 1) buffer_device[MOTOR] = 0;
             break;
 
         case DO_AM:
@@ -44,6 +45,7 @@ void fsm_lcd(){
                 status = INIT_PASSWORD;
                 lcd_init();            
             }
+            if(timer_flag[1] == 1) buffer_device[MOTOR] = 0;
             break;
         case ANH_SANG:
             timelcd--;
@@ -59,6 +61,7 @@ void fsm_lcd(){
                 status = INIT_PASSWORD;
                 lcd_init();
             }
+            if(timer_flag[1] == 1) buffer_device[MOTOR] = 0;
             break;
         default:
             break;
@@ -78,18 +81,11 @@ void fsm_password(){
                     if (strcmp(input, "1234") == 0) { // So sánh với mật khẩu
                         lcd_goto_XY(1, 0);
                         lcd_send_string((char*)"Mat khau dung");
-                        //digitalWrite(HIGH); // Bật thiết bị
                         buffer_device[MOTOR] = 1;
-                        delay(1000);
-                        input_index = 0; 
-                        memset(input, 0, sizeof(input));
-                        status = INIT; 
-                        lcd_clear_display();
-                        lcd_init();
+                        setTimer(0, 2);
                     } else {
                         lcd_goto_XY(1, 0);
                         lcd_send_string((char*)"Sai! Thu lai.");
-                        delay(1000);
                         input_index = 0;
                         memset(input, 0, sizeof(input));
                         lcd_clear_display();
@@ -111,6 +107,16 @@ void fsm_password(){
                     memset(input, 0, sizeof(input));
                     status = INIT_PASSWORD;
                 }
+                if(timer_flag[0] == 1){
+                    timer_flag[0] = 0;
+                    setTimer(1, 2);
+                    buffer_device[MOTOR] = 1;
+                    input_index = 0; 
+                    memset(input, 0, sizeof(input));
+                    status = INIT; 
+                    lcd_clear_display();
+                    lcd_init();
+                }                
 
             break;
 
